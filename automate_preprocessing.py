@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", type=str, required=True)
     parser.add_argument("--target_column", type=str, required=True)
     parser.add_argument("--impute_method", type=str, default="median")
-    parser.add_argument("--save_path", type=str, default="preprocessor.joblib")
+    parser.add_argument("--save_path", type=str, default="preprocessing/preprocessor.joblib")
     args = parser.parse_args()
 
     # Validasi dataset
