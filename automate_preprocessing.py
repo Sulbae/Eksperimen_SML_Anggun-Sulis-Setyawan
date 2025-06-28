@@ -8,6 +8,9 @@ from sklearn.model_selection import train_test_split
 import argparse
 import os
 
+# Konfigurasi MLflow
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+
 # Fungsi preprocess data
 def preprocess_data(data, target_column, impute_method, save_path):
     # Pemisahan Fitur dan Target
