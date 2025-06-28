@@ -40,7 +40,7 @@ def preprocess_data(data, target_column, impute_method, save_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, required=True)
-    parser.add_argument("--target_column", type=str, required=True)
+    parser.add_argument("--target_column", type=str, default='Potability')
     parser.add_argument("--impute_method", type=str, default="median")
     parser.add_argument("--save_path", type=str, default="preprocessing/preprocessor.joblib")
     args = parser.parse_args()
