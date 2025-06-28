@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8fead876243140929174c684bfa0c8f4/artifacts
+end_time: 1751115604221
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8fead876243140929174c684bfa0c8f4
+run_name: smiling-quail-789
+run_uuid: 8fead876243140929174c684bfa0c8f4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751115599808
+status: 4
+tags: []
+user_id: ACER
