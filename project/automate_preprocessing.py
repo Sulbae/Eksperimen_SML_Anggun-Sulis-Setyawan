@@ -16,6 +16,7 @@ mlflow.set_experiment("Water Potability Preprocessing")
 def preprocess_data(data, impute_method, save_path, output_path):
     import logging
     logging.basicConfig(level=logging.INFO)
+    logging.info("Mulai preprocessing...")
 
     # Cek kondisi data
     if not data.isnull().any().any():
@@ -66,22 +67,25 @@ if __name__ == "__main__":
     data = pd.read_csv(dataset_path)
     dataset_version = "v1.0"
 
-    # Start MLflow run
-    with mlflow.start_run():
-        cleaned_data, cleaned_data_path = preprocess_data(
-            data,
-            args.impute_method,
-            args.save_path,
-            args.output_path
-        )
-    
-        # Log parameter
-        mlflow.log_param("dataset_version", dataset_version)
-        mlflow.log_param("dataset_path", dataset_path)
-        mlflow.log_param("impute_method", args.impute_method)
+    # MLflow run
+    if mlflow.active_run() is None:
+        mlflow.start_run()
 
-        # Log preprocessor
-        mlflow.log_artifact(dataset_path, artifact_path="raw_data")
-        if os.path.exists(args.save_path):
-            mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
-        mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
+    # Proses data
+    cleaned_data, cleaned_data_path = preprocess_data(
+        data,
+        args.impute_method,
+        args.save_path,
+        args.output_path
+    )
+
+    # Log parameter
+    mlflow.log_param("dataset_version", dataset_version)
+    mlflow.log_param("dataset_path", dataset_path)
+    mlflow.log_param("impute_method", args.impute_method)
+
+    # Log preprocessor
+    mlflow.log_artifact(dataset_path, artifact_path="raw_data")
+    if os.path.exists(args.save_path):
+        mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
+    mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
