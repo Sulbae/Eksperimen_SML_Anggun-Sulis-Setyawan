@@ -7,11 +7,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 import argparse
 import os
-import logging
-
-# Konfigurasi logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Konfigurasi MLflow
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
@@ -19,7 +14,8 @@ mlflow.set_experiment("Water Potability Preprocessing")
 
 # Fungsi preprocess data
 def preprocess_data(data, impute_method, save_path, output_path):
-    logger.info("Mulai preprocessing...")
+    import logging
+    logging.basicConfig(level=logging.INFO)
 
     # Cek kondisi data
     if not data.isnull().any().any():
@@ -50,58 +46,37 @@ def preprocess_data(data, impute_method, save_path, output_path):
 # Script
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="water_potability_raw.csv")
+    parser.add_argument("--dataset", type=str, default="project/water_potability_raw.csv")
     parser.add_argument("--impute_method", type=str, default="median")
     parser.add_argument("--save_path", type=str, default="preprocessing/preprocessor.joblib")
     parser.add_argument("--output_path", type=str, default="preprocessing/water_potability_preprocessing.csv")
     args = parser.parse_args()
 
-    # Path absolut file .py ini
-    py_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Pastikan path ke absolut lokasi file python
-    dataset_path = os.path.join(py_dir, args.dataset)
-    save_path = os.path.join(py_dir, args.save_path)
-    output_path = os.path.join(py_dir, args.output_path)
-
-    # Buat folder tujuan jika belum tersedia
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
     # Validasi dataset
-    if not os.path.isfile(dataset_path):
-        raise FileNotFoundError(f"Dataset tidak ditemukan: {dataset_path}")
-
-    logger.info(f"Dataset ditemukan di: {dataset_path}")
+    if not os.path.isfile(args.dataset):
+        raise FileNotFoundError(f"Dataset tidak ditemukan: {args.dataset}")
 
     # Memuat data
-    data = pd.read_csv(dataset_path)
+    data = pd.read_csv(args.dataset)
+    dataset_path = os.path.abspath(args.dataset)
     dataset_version = "v1.0"
 
-    # Proses data
-    cleaned_data, cleaned_data_path = preprocess_data(
-        data,
-        args.impute_method,
-        args.save_path,
-        args.output_path
-    )
-
-    def log_to_mlflow():
-        # Log parameter
-            mlflow.log_param("dataset_version", dataset_version)
-            mlflow.log_param("dataset_path", dataset_path)
-            mlflow.log_param("impute_method", args.impute_method)
-
-            # Log artifacts
-            mlflow.log_artifact(dataset_path, artifact_path="raw_data")
-            if os.path.exists(save_path):
-                mlflow.log_artifact(save_path, artifact_path="preprocessor")
-            mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
-
-    if mlflow.active_run() is None:
-        with mlflow.start_run():
-             log_to_mlflow()
-    else:
-         log_to_mlflow()
+    # Start MLflow run
+    with mlflow.start_run():
+        cleaned_data, cleaned_data_path = preprocess_data(
+            data,
+            args.impute_method,
+            args.save_path,
+            args.output_path
+        )
     
-    logger.info("Preprocessing Selesai!")
+        # Log parameter
+        mlflow.log_param("dataset_version", dataset_version)
+        mlflow.log_param("dataset_path", dataset_path)
+        mlflow.log_param("impute_method", args.impute_method)
+
+        # Log preprocessor
+        mlflow.log_artifact(args.dataset, artifact_path="raw_data")
+        if os.path.exists(args.save_path):
+            mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
+        mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
