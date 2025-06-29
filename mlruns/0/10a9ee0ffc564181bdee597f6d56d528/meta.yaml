@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/10a9ee0ffc564181bdee597f6d56d528/artifacts
+end_time: 1751181197903
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 10a9ee0ffc564181bdee597f6d56d528
+run_name: dashing-squid-630
+run_uuid: 10a9ee0ffc564181bdee597f6d56d528
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751181191435
+status: 4
+tags: []
+user_id: ACER
