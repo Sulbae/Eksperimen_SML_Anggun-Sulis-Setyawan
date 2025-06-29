@@ -86,15 +86,22 @@ if __name__ == "__main__":
         args.output_path
     )
 
-    # Log parameter
-    mlflow.log_param("dataset_version", dataset_version)
-    mlflow.log_param("dataset_path", dataset_path)
-    mlflow.log_param("impute_method", args.impute_method)
+    def log_to_mlflow():
+        # Log parameter
+            mlflow.log_param("dataset_version", dataset_version)
+            mlflow.log_param("dataset_path", dataset_path)
+            mlflow.log_param("impute_method", args.impute_method)
 
-    # Log preprocessor
-    mlflow.log_artifact(dataset_path, artifact_path="raw_data")
-    if os.path.exists(args.save_path):
-        mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
-    mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
+            # Log artifacts
+            mlflow.log_artifact(dataset_path, artifact_path="raw_data")
+            if os.path.exists(save_path):
+                mlflow.log_artifact(save_path, artifact_path="preprocessor")
+            mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
 
+    if mlflow.active_run() is None:
+        with mlflow.start_run():
+             log_to_mlflow()
+    else:
+         log_to_mlflow()
+    
     logger.info("Preprocessing Selesai!")
