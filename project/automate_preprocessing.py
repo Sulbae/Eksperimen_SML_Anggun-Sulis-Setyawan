@@ -52,13 +52,18 @@ if __name__ == "__main__":
     parser.add_argument("--output_path", type=str, default="preprocessing/water_potability_preprocessing.csv")
     args = parser.parse_args()
 
+    # Path absolut file .py ini
+    py_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Pastikan dataset dicari pada lokasi file python
+    dataset_path = os.path.join(py_dir, args.dataset)
+
     # Validasi dataset
-    if not os.path.isfile(args.dataset):
-        raise FileNotFoundError(f"Dataset tidak ditemukan: {args.dataset}")
+    if not os.path.isfile(dataset_path):
+        raise FileNotFoundError(f"Dataset tidak ditemukan: {dataset_path}")
 
     # Memuat data
-    data = pd.read_csv(args.dataset)
-    dataset_path = os.path.abspath(args.dataset)
+    data = pd.read_csv(dataset_path)
     dataset_version = "v1.0"
 
     # Start MLflow run
@@ -76,7 +81,7 @@ if __name__ == "__main__":
         mlflow.log_param("impute_method", args.impute_method)
 
         # Log preprocessor
-        mlflow.log_artifact(args.dataset, artifact_path="raw_data")
+        mlflow.log_artifact(dataset_path, artifact_path="raw_data")
         if os.path.exists(args.save_path):
             mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
         mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
