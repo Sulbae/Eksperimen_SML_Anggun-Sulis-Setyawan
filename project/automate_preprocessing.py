@@ -67,10 +67,6 @@ if __name__ == "__main__":
     data = pd.read_csv(dataset_path)
     dataset_version = "v1.0"
 
-    # MLflow run
-    if mlflow.active_run() is None:
-        mlflow.start_run()
-
     # Proses data
     cleaned_data, cleaned_data_path = preprocess_data(
         data,
