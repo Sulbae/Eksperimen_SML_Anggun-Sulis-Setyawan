@@ -7,6 +7,11 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 import argparse
 import os
+import logging
+
+# Konfigurasi logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Konfigurasi MLflow
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
@@ -14,9 +19,7 @@ mlflow.set_experiment("Water Potability Preprocessing")
 
 # Fungsi preprocess data
 def preprocess_data(data, impute_method, save_path, output_path):
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Mulai preprocessing...")
+    logger.info("Mulai preprocessing...")
 
     # Cek kondisi data
     if not data.isnull().any().any():
@@ -56,12 +59,20 @@ if __name__ == "__main__":
     # Path absolut file .py ini
     py_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Pastikan dataset dicari pada lokasi file python
+    # Pastikan path ke absolut lokasi file python
     dataset_path = os.path.join(py_dir, args.dataset)
+    save_path = os.path.join(py_dir, args.save_path)
+    output_path = os.path.join(py_dir, args.output_path)
+
+    # Buat folder tujuan jika belum tersedia
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     # Validasi dataset
     if not os.path.isfile(dataset_path):
         raise FileNotFoundError(f"Dataset tidak ditemukan: {dataset_path}")
+
+    logger.info(f"Dataset ditemukan di: {dataset_path}")
 
     # Memuat data
     data = pd.read_csv(dataset_path)
@@ -85,3 +96,5 @@ if __name__ == "__main__":
     if os.path.exists(args.save_path):
         mlflow.log_artifact(args.save_path, artifact_path="preprocessor")
     mlflow.log_artifact(cleaned_data_path, artifact_path="cleaned_data")
+
+    logger.info("Preprocessing Selesai!")

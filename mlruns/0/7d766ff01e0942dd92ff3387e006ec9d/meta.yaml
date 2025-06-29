@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/7d766ff01e0942dd92ff3387e006ec9d/artifacts
+end_time: 1751186180323
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7d766ff01e0942dd92ff3387e006ec9d
+run_name: brawny-bat-807
+run_uuid: 7d766ff01e0942dd92ff3387e006ec9d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751186175401
+status: 4
+tags: []
+user_id: ACER
