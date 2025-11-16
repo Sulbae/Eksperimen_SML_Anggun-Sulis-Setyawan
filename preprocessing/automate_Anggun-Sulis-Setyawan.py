@@ -16,10 +16,10 @@ def preprocess_data():
     file_name = "water_potability_raw.csv"
 
     data_path = os.path.join(data_folder, file_name)
-    logging.info(f"Dataset berhasil di-load dari {data_path}")
-
+    
     # Load dataset
     data = pd.read_csv(data_path)
+    logging.info(f"Dataset berhasil di-load dari {data_path}")
 
     # Pisahkan fitur dan target
     X = data.drop(columns=['Potability'])
@@ -35,7 +35,8 @@ def preprocess_data():
     X_preprocessed = preprocessing_pipeline.fit_transform(X)
 
     # Simpan Pipeline
-    dump(preprocessing_pipeline, 'preprocessing_pipeline.joblib')
+    pipeline_path = os.path.join("preprocessing", "preprocessing_pipeline.joblib")
+    dump(preprocessing_pipeline, pipeline_path)
 
     # Gabungkan lagi data
     X_preprocessed = pd.DataFrame(X_preprocessed, columns=X.columns)
