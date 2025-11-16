@@ -12,7 +12,7 @@ def preprocess_data():
     logging.basicConfig(level=logging.INFO)
 
     # Dataset Source
-    data_folder = "../dataset_raw"
+    data_folder = "./dataset_raw"
     file_name = "water_potability_raw.csv"
 
     data_path = os.path.join(data_folder, file_name)
@@ -47,3 +47,6 @@ def preprocess_data():
     df_scaled.to_csv("preprocessing/water_potability_preprocessing.csv", index=False)
 
     return df_scaled
+
+if __name__ == "__main__":
+    preprocess_data()
