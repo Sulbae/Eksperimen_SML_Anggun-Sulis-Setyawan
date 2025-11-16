@@ -44,6 +44,6 @@ def preprocess_data():
     df_scaled = pd.concat([X_preprocessed, y], axis=1)
 
     # Simpan Preprocessed Data
-    df_scaled.to_csv('water_potability_preprocessing.csv', index=False)
+    df_scaled.to_csv("preprocessing/water_potability_preprocessing.csv", index=False)
 
     return df_scaled
