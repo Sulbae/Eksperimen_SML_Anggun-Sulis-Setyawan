@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import os
 import logging
 
-def preprocess_data():
+def preprocess_data() -> None:
 
     logging.basicConfig(level=logging.INFO)
 
@@ -45,8 +45,6 @@ def preprocess_data():
 
     # Simpan Preprocessed Data
     df_scaled.to_csv("preprocessing/water_potability_preprocessing.csv", index=False)
-
-    return df_scaled
 
 if __name__ == "__main__":
     preprocess_data()
